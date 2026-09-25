@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="graphite">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>farm — live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Theme: Graphite (default) ---------- */
+  :root, [data-theme="graphite"]{
+    --base:#1a1a1d; --mantle:#141416; --crust:#1a1a1d;
+    --surface: rgba(255,255,255,0.05);
+    --surface-hi: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.13);
+    --text:#ffffff; --subtext:#9a9a9f; --dim:#555558;
+    --white:#ffffff;
+    --accent:#ffffff; --accent-fg:#1a1a1d;
+    --backdrop: rgba(0,0,0,0.6);
+    --bg-blob-1: rgba(255,255,255,0.10);
+    --bg-blob-2: rgba(255,255,255,0.07);
+    --bg-blob-3: rgba(255,255,255,0.05);
+    --dot-color: rgba(255,255,255,0.34);
+  }
+  /* ---------- Theme: Fog ---------- */
+  [data-theme="fog"]{
+    --base:#e8e8ec; --mantle:#dcdce0; --crust:#e8e8ec;
+    --surface: rgba(255,255,255,0.55);
+    --surface-hi: rgba(255,255,255,0.78);
+    --border: rgba(0,0,0,0.12);
+    --text:#000000; --subtext:#3a3a3a; --dim:#858585;
+    --white:#000000;
+    --accent:#1a1a1d; --accent-fg:#ffffff;
+    --backdrop: rgba(0,0,0,0.35);
+    --bg-blob-1: rgba(0,0,0,0.05);
+    --bg-blob-2: rgba(0,0,0,0.035);
+    --bg-blob-3: rgba(0,0,0,0.025);
+    --dot-color: rgba(0,0,0,0.24);
+  }
+  /* ---------- Theme: Cocoa ---------- */
+  [data-theme="cocoa"]{
+    --base:#e8d8c4; --mantle:#dcc9b0; --crust:#e8d8c4;
+    --surface: rgba(255,255,255,0.42);
+    --surface-hi: rgba(255,255,255,0.65);
+    --border: rgba(61,40,23,0.18);
+    --text:#3d2817; --subtext:#7a5a3a; --dim:#b89a78;
+    --white:#3d2817;
+    --accent:#9c6b3f; --accent-fg:#ffffff;
+    --backdrop: rgba(61,40,23,0.35);
+    --bg-blob-1: rgba(156,107,63,0.10);
+    --bg-blob-2: rgba(156,107,63,0.07);
+    --bg-blob-3: rgba(156,107,63,0.05);
+    --dot-color: rgba(61,40,23,0.22);
+  }
+  /* ---------- Theme: Cherry ---------- */
+  [data-theme="cherry"]{
+    --base:#f4cdd6; --mantle:#e8b4c2; --crust:#f4cdd6;
+    --surface: rgba(255,255,255,0.42);
+    --surface-hi: rgba(255,255,255,0.65);
+    --border: rgba(122,31,58,0.20);
+    --text:#7a1f3a; --subtext:#9a3a55; --dim:#c08aa0;
+    --white:#7a1f3a;
+    --accent:#c2185b; --accent-fg:#ffffff;
+    --backdrop: rgba(122,31,58,0.32);
+    --bg-blob-1: rgba(194,24,91,0.10);
+    --bg-blob-2: rgba(194,24,91,0.07);
+    --bg-blob-3: rgba(194,24,91,0.05);
+    --dot-color: rgba(122,31,58,0.24);
+  }
+  /* ---------- Theme: Lagoon ---------- */
+  [data-theme="lagoon"]{
+    --base:#c8f0ee; --mantle:#a8e0dc; --crust:#c8f0ee;
+    --surface: rgba(255,255,255,0.48);
+    --surface-hi: rgba(255,255,255,0.72);
+    --border: rgba(13,79,92,0.18);
+    --text:#0d4f5c; --subtext:#2a6a78; --dim:#6aa8b0;
+    --white:#0d4f5c;
+    --accent:#0277a3; --accent-fg:#ffffff;
+    --backdrop: rgba(13,79,92,0.30);
+    --bg-blob-1: rgba(2,119,163,0.10);
+    --bg-blob-2: rgba(2,119,163,0.07);
+    --bg-blob-3: rgba(2,119,163,0.05);
+    --dot-color: rgba(13,79,92,0.22);
+  }
+  /* ---------- Theme: Cotton Candy ---------- */
+  [data-theme="cottoncandy"]{
+    --base:#fbd6ec; --mantle:#f3c4e0; --crust:#fbd6ec;
+    --surface: rgba(255,255,255,0.52);
+    --surface-hi: rgba(255,255,255,0.74);
+    --border: rgba(91,75,138,0.20);
+    --text:#4a5db8; --subtext:#7a6db0; --dim:#b8a6d8;
+    --white:#4a5db8;
+    --accent:#5b8de8; --accent-fg:#ffffff;
+    --backdrop: rgba(91,75,138,0.26);
+    --bg-blob-1: rgba(91,141,232,0.14);
+    --bg-blob-2: rgba(176,134,216,0.10);
+    --bg-blob-3: rgba(91,141,232,0.06);
+    --dot-color: rgba(91,75,138,0.26);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter', sans-serif;
+    background: var(--crust);
+    color: var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    transition: background .4s ease, background-color .4s ease, color .4s ease, border-color .4s ease;
+  }
+
+  .glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    overflow:hidden;
+    background: var(--base);
+    transition: background .4s ease;
+  }
+  .blob{
+    position:absolute; border-radius:50%;
+    filter: blur(70px);
+  }
+  .blob1{
+    width:56vw; height:56vw; top:-22%; left:-16%;
+    background: radial-gradient(circle, var(--bg-blob-1), transparent 70%);
+    animation: drift1 24s ease-in-out infinite alternate;
+  }
+  .blob2{
+    width:50vw; height:50vw; top:-6%; right:-18%;
+    background: radial-gradient(circle, var(--bg-blob-2), transparent 70%);
+    animation: drift2 30s ease-in-out infinite alternate;
+  }
+  .blob3{
+    width:60vw; height:60vw; bottom:-28%; left:20%;
+    background: radial-gradient(circle, var(--bg-blob-3), transparent 70%);
+    animation: drift3 34s ease-in-out infinite alternate;
+  }
+  @keyframes drift1{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(6%,8%) scale(1.12); } }
+  @keyframes drift2{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(-8%,6%) scale(1.08); } }
+  @keyframes drift3{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(4%,-6%) scale(1.15); } }
+
+  .dot-grid{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(var(--dot-color) 2.6px, transparent 3.2px);
+    background-size: 24px 24px;
+    background-position: -4px -4px;
+    -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 35%, black 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 35%, black 55%, transparent 100%);
+    transition: background-image .4s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .blob{ animation: none !important; }
+    .orb.ok, .orb.alert{ animation: none !important; }
+    .card, .topbar, .hero{ animation: none !important; }
+  }
+
+  .wrap{
+    position:relative; z-index:1;
+    max-width:960px; margin:0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  .glass{
+    position:relative;
+    overflow:hidden;
+    background: var(--surface);
+    backdrop-filter: blur(36px) saturate(180%);
+    -webkit-backdrop-filter: blur(36px) saturate(180%);
+    border: 1px solid var(--border);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.15),
+      inset 0 -1px 0 rgba(0,0,0,0.05),
+      0 10px 36px rgba(0,0,0,0.25);
+    transition: transform .35s cubic-bezier(.16,1,.3,1), background .4s ease, background-color .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+  .glass::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(165deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0) 55%);
+    pointer-events:none;
+  }
+  .glass::after{
+    content:"";
+    position:absolute; left:8%; right:8%; top:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    pointer-events:none;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform: translateY(16px) scale(0.965); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+  .topbar, .controls-bar, .hero, .card, .history-panel{ animation: riseIn .7s cubic-bezier(.16,1,.3,1) both; }
+  .topbar{ animation-delay: 0s; }
+  .controls-bar{ animation-delay: 0.04s; }
+  .hero{ animation-delay: .08s; }
+  .grid .card:nth-child(1){ animation-delay: .16s; }
+  .grid .card:nth-child(2){ animation-delay: .22s; }
+  .grid .card:nth-child(3){ animation-delay: .28s; }
+  .grid .card:nth-child(4){ animation-delay: .34s; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-dot{
+    width:10px; height:10px; border-radius:50%;
+    background: var(--dim);
+    transition: background .4s ease, box-shadow .4s ease;
+  }
+  .brand-dot.live{
+    background: var(--accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .brand-text{
+    font-family:'Sora', sans-serif; font-weight:700; font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .brand-text span{ color: var(--subtext); font-weight:500; }
+
+  .topbar-actions{ display:flex; align-items:center; gap:10px; }
+  .icon-group{ display:flex; gap:6px; }
+
+  /* ---------- Theme swatches ---------- */
+  .theme-swatches{ display:flex; align-items:center; gap:7px; padding: 0 2px; }
+  .swatch{
+    width:20px; height:20px; border-radius:50%;
+    border: 1.5px solid var(--border);
+    cursor:pointer; position:relative;
+    padding:0; background: transparent;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, border-color .3s ease;
+    flex-shrink:0;
+  }
+  .swatch::before{
+    content:""; position:absolute; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    width:8px; height:8px; border-radius:50%;
+    background: var(--swatch-fg, #fff);
+  }
+  .swatch:hover{ transform: translateY(-2px) scale(1.12); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+  .swatch:active{ transform: translateY(0) scale(0.92); transition-duration:.12s; }
+  .swatch.active{ border-color: var(--text); }
+  .swatch.active::after{
+    content:""; position:absolute; inset:-5px; border-radius:50%;
+    border: 2px solid var(--accent);
+    animation: swatchPop .3s cubic-bezier(.34,1.56,.64,1);
+    pointer-events:none;
+  }
+  @keyframes swatchPop{ from{ transform:scale(0.6); opacity:0; } to{ transform:scale(1); opacity:1; } }
+
+  .icon-btn{
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--surface);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid var(--border);
+    cursor:pointer;
+    transition: background .3s ease, background-color .3s ease, border-color .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
+  }
+  .icon-btn:hover{ background: var(--surface-hi); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.22); }
+  .icon-btn:active{ transform: translateY(0) scale(0.88); transition-duration:.12s; }
+  .icon-btn svg{ width:16px; height:16px; color: var(--text); opacity:0.85; transition: transform .3s cubic-bezier(.34,1.56,.64,1), color .3s ease; }
+  .icon-btn:active svg{ transform: scale(0.9); }
+
+  .matte{
+    position:relative;
+    background: var(--surface);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    transition: background .4s ease, background-color .4s ease, border-color .4s ease;
+  }
+
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:13px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:999px;
+    padding: 8px 16px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .3s ease, background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); background: var(--surface-hi); box-shadow: 0 6px 14px rgba(0,0,0,0.16); }
+  .btn:active{ transform: translateY(0) scale(0.96); transition-duration:.12s; }
+  .btn svg { opacity: 0.8; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .btn:active svg{ transform: scale(0.9); }
+  .btn-primary{
+    color: var(--crust);
+    background: var(--white);
+    border:none;
+  }
+  .btn-primary:hover{ background: var(--accent); color: var(--accent-fg); }
+  .btn-primary.connected{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .controls-bar{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    gap:10px; padding: 10px 16px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+  .controls-group{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .hero{
+    display:flex; align-items:center; justify-content:space-between; gap:22px;
+    padding: 24px 28px;
+    border-radius: 34px;
+    margin-bottom: 18px;
+  }
+  .hero-main{ display:flex; align-items:center; gap:20px; }
+  .orb{
+    width:56px; height:56px; border-radius:50%; flex-shrink:0;
+    background: radial-gradient(circle at 35% 30%, #3a3a3a, #1a1a1a 60%, #000 100%);
+    transition: background .4s ease, box-shadow .4s ease, background-color .4s ease;
+  }
+  .orb.ok{
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 90%, white), var(--accent) 62%, color-mix(in srgb, var(--accent) 78%, black) 100%);
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 14%, transparent), 0 0 30px color-mix(in srgb, var(--accent) 55%, transparent);
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  .orb.alert{
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 92%, white), var(--accent) 60%, color-mix(in srgb, var(--accent) 75%, black) 100%);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 20%, transparent), 0 0 40px color-mix(in srgb, var(--accent) 72%, transparent);
+    animation: flash 0.6s steps(1) infinite;
+  }
+  .orb.idle{
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--dim) 78%, var(--crust)), var(--dim) 58%, color-mix(in srgb, var(--dim) 42%, var(--crust)) 100%);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--dim) 30%, transparent);
+  }
+  @keyframes breathe{ 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.08); } }
+  @keyframes flash{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0.35; } }
+
+  .hero-text .status-label{
+    font-family:'Sora', sans-serif; font-weight:700; font-size:20px;
+    letter-spacing:0.01em;
+  }
+  .hero-text .status-sub{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    color: var(--subtext); margin-top:4px;
+  }
+  .hero-stats{
+    text-align:right; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--subtext);
+    display:flex; flex-direction:column; gap:4px;
+  }
+
+  .thresholds-panel{
+    border-radius: 24px;
+    padding: 0 20px;
+    margin-bottom: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height .45s cubic-bezier(.16,1,.3,1), opacity .3s ease, padding .45s cubic-bezier(.16,1,.3,1), margin-bottom .45s cubic-bezier(.16,1,.3,1);
+  }
+  .thresholds-panel.open{
+    max-height: 620px;
+    opacity: 1;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    transition: max-height .45s cubic-bezier(.16,1,.3,1), opacity .35s ease .05s, padding .45s cubic-bezier(.16,1,.3,1), margin-bottom .45s cubic-bezier(.16,1,.3,1);
+  }
+  .thresholds-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;
+    margin-top:10px;
+  }
+  .thresh-item{
+    display:flex; flex-direction:column; gap:4px;
+    font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--subtext);
+  }
+  .thresh-item label{ color:var(--text); font-weight:600; font-family:'Inter', sans-serif; }
+  .thresh-item input{
+    background: var(--surface-hi); border: 1px solid var(--border);
+    color: var(--text); border-radius: 6px; padding: 4px 8px; font-family:inherit;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:14px;
+    margin-bottom:18px;
+  }
+  @media (min-width:640px){
+    .grid{ grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .card{
+    border-radius: 28px;
+    padding: 20px;
+    cursor: default;
+    transition: border-color .4s ease, box-shadow .4s ease, background .4s ease, background-color .4s ease, transform .35s cubic-bezier(.16,1,.3,1);
+  }
+  .card:hover{ transform: translateY(-3px); }
+
+  /* Alert state — solid black background, white text */
+  .card.flag{
+    background: #000000 !important;
+    border-color: #000000;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 36px rgba(0,0,0,0.45);
+  }
+  .card.flag .card-value, .card.flag .card-label, .card.flag .card-icon, .card.flag .stats-row{
+    color: #ffffff !important;
+  }
+  .card.flag .card-value .unit{ color: rgba(255,255,255,0.7) !important; }
+  .card.flag .icon-badge{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+  }
+  .card.flag .card-bar{ background: rgba(255,255,255,0.18); }
+  .card.flag .card-bar-fill{ background: #ffffff; }
+  .card.flag .graph-fill{ fill: rgba(255,255,255,0.14); }
+  .card.flag .graph-line{ stroke: #ffffff; }
+
+  .icon-badge{
+    width:44px; height:44px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+    position:relative;
+    background: var(--surface-hi);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 24%, transparent), 0 4px 14px rgba(0,0,0,0.14);
+    transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+  .icon-badge::after{
+    content:"";
+    position:absolute; inset:0; border-radius:inherit;
+    background: linear-gradient(150deg, color-mix(in srgb, var(--accent) 34%, transparent), transparent 72%);
+    opacity:0.7; pointer-events:none;
+  }
+  .card-icon{ width:20px; height:20px; color: var(--accent); position:relative; z-index:1; transition: color .4s ease; }
+  .card-value{
+    font-family:'Sora', sans-serif; font-weight:700; font-size:33px;
+    line-height:1; display:flex; align-items:flex-end; gap:6px;
+    letter-spacing:-0.01em;
+  }
+  .card-value .unit{
+    font-family:'Inter', sans-serif;
+    font-size:12.5px; font-weight:600; color:var(--subtext);
+    letter-spacing:0.02em; text-transform:lowercase;
+    margin-bottom:4px;
+  }
+  .card-label{ font-size:11px; color: var(--subtext); margin-top:8px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; font-family:'Inter', sans-serif; }
+  
+  .card-bar{ margin-top:10px; height:4px; border-radius:99px; background: var(--surface-hi); overflow:hidden; transition: background .4s ease; }
+  .card-bar-fill{ height:100%; border-radius:99px; background: var(--accent); width:0%; transition: width .5s ease, background .4s ease; }
+
+  .card-graph{ margin-top:12px; height: 60px; }
+  .card-graph svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .graph-fill{ fill: color-mix(in srgb, var(--accent) 14%, transparent); stroke:none; transition: fill .4s ease; }
+  .graph-line{ fill:none; stroke: var(--accent); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; vector-effect: non-scaling-stroke; opacity:0.95; transition: stroke .4s ease; }
+
+  .stats-row{
+    margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--subtext);
+    display:flex; justify-content:space-between; border-top: 1px solid var(--border); padding-top:6px;
+  }
+
+  .history-panel{
+    border-radius: 28px;
+    padding: 20px;
+    margin-bottom: 18px;
+    display: block;
+  }
+  .history-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .history-title{ font-family:'Sora', sans-serif; font-weight:700; font-size:14px; }
+  .history-list{
+    list-style:none; max-height:160px; overflow-y:auto;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .history-item{
+    padding: 6px 10px; border-radius: 8px; background: var(--surface-hi);
+    display:flex; justify-content:space-between; color:var(--text);
+  }
+
+  .footer-note{
+    text-align:center; color: var(--subtext); font-size:11.5px;
+    margin-top:18px; font-family:'JetBrains Mono', monospace; opacity:0.7;
+  }
+
+  @keyframes skeletonPulse{ 0%,100%{ opacity:.3; } 50%{ opacity:.75; } }
+  .card-value.skeleton{ animation: skeletonPulse 1.5s ease-in-out infinite; }
+
+  .trend{
+    font-size:12px; margin-left:5px; opacity:0.55; font-weight:600;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  .unsupported-overlay{
+    display:none; position:fixed; inset:0; z-index:50;
+    overflow-y:auto;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:16px;
+    padding: 60px 24px;
+  }
+  .unsupported-overlay .u-title{
+    font-family:'Sora', sans-serif; font-weight:800; font-size:24px;
+    max-width:480px; line-height:1.3;
+  }
+  .unsupported-overlay .u-body{
+    font-family:'JetBrains Mono', monospace; font-size:13px;
+    color: var(--subtext); max-width:440px; line-height:1.7;
+  }
+
+  .switch-btn{ cursor:pointer; user-select:none; }
+  .switch-track{
+    position:relative; display:inline-block;
+    width:34px; height:18px; margin-left:8px;
+    border-radius:999px;
+    background: var(--surface-hi);
+    border: 1px solid var(--border);
+    transition: background .3s ease, background-color .3s ease, border-color .3s ease;
+    flex-shrink:0;
+  }
+  .switch-track input{
+    position:absolute; inset:0; opacity:0; margin:0; cursor:pointer;
+  }
+  .switch-dot{
+    position:absolute; top:2px; left:2px;
+    width:12px; height:12px; border-radius:50%;
+    background: var(--subtext);
+    transition: transform .25s cubic-bezier(.16,1,.3,1), background .3s ease, box-shadow .3s ease;
+    pointer-events:none;
+  }
+  .switch-track input:checked ~ .switch-dot{
+    transform: translateX(16px);
+    background: var(--white);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .switch-track:has(input:checked){
+    background: color-mix(in srgb, var(--accent) 22%, var(--surface-hi));
+  }
+
+  .modal-backdrop{
+    position:fixed; inset:0; z-index:80;
+    background: var(--backdrop);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition: opacity .4s cubic-bezier(.16,1,.3,1), backdrop-filter .4s ease, visibility 0s linear .4s, background .4s ease;
+  }
+  .modal-backdrop.open{
+    opacity:1; visibility:visible; pointer-events:auto;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: opacity .4s cubic-bezier(.16,1,.3,1), backdrop-filter .4s ease, visibility 0s linear 0s, background .4s ease;
+  }
+  .modal-panel{
+    position:absolute; inset:0;
+    overflow-y:auto;
+    padding: 60px max(24px, calc(50% - 340px));
+    opacity:0;
+    transform: translateY(22px) scale(0.97);
+    transition: opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .modal-backdrop.open .modal-panel{
+    opacity:1;
+    transform: translateY(0) scale(1);
+    transition: opacity .45s cubic-bezier(.16,1,.3,1) .05s, transform .45s cubic-bezier(.16,1,.3,1) .05s;
+  }
+  .modal-close{
+    position:fixed; top:24px; right:24px;
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--surface-hi); border:1px solid var(--border);
+    cursor:pointer; color:var(--text);
+    z-index:81;
+    transition: background .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .modal-close:hover{ background: var(--surface); transform: rotate(90deg); }
+  .modal-close:active{ transform: rotate(90deg) scale(0.88); transition-duration:.12s; }
+  .modal-panel h3{
+    font-family:'Sora', sans-serif; font-weight:700; font-size:28px;
+    margin-bottom:22px; max-width:680px;
+  }
+  .modal-panel p{
+    font-family:'Inter', sans-serif; font-size:15px; line-height:1.85;
+    color: var(--subtext); margin-bottom:16px; max-width:680px;
+  }
+  .modal-panel ul{ margin: 0 0 16px 20px; max-width:680px; }
+  .modal-panel li{
+    font-family:'Inter', sans-serif; font-size:15px; line-height:1.85;
+    color: var(--subtext); margin-bottom:8px;
+  }
+  .modal-panel strong{ color: var(--text); }
+  .modal-panel code{
+    font-family:'JetBrains Mono', monospace; font-size:0.9em;
+    background: var(--surface-hi); padding:2px 6px; border-radius:5px;
+    color: var(--text);
+  }
+  .modal-panel h4{
+    font-family:'Sora', sans-serif; font-weight:600; font-size:16px;
+    color: var(--text); margin: 22px 0 8px; max-width:680px;
+  }
+
+  .table-wrap{
+    overflow-x:auto; margin: 6px 0 20px;
+    border-radius:14px; border:1px solid var(--border);
+  }
+  .wiring-table{
+    width:100%; border-collapse:collapse;
+    font-family:'Inter', sans-serif; font-size:12.5px;
+    min-width:520px;
+  }
+  .wiring-table thead th{
+    text-align:left; font-family:'JetBrains Mono', monospace;
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em;
+    color: var(--subtext); font-weight:600;
+    background: var(--surface-hi);
+    padding: 10px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  .wiring-table tbody td{
+    padding: 11px 14px;
+    color: var(--text);
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  .wiring-table tbody tr:last-child td{ border-bottom:none; }
+  .wiring-table tbody tr:nth-child(even){ background: var(--surface); }
+  .wiring-table td code{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px;
+    background: var(--surface-hi); padding:2px 6px; border-radius:5px;
+  }
+  .wiring-table .table-sub{
+    display:block; font-size:10.5px; color: var(--subtext); margin-top:2px;
+  }
+
+  .sensor-explain{
+    display:flex; flex-direction:column; gap:10px;
+    margin: 6px 0 20px;
+  }
+  .sensor-explain-item{
+    border-radius:16px; border:1px solid var(--border);
+    background: var(--surface-hi);
+    padding: 16px 18px;
+    max-width:680px;
+  }
+  .why-card{ box-shadow: inset 3px 0 0 0 var(--accent, transparent); }
+  .why-card-soil{ --accent: rgba(120,220,150,0.6); }
+  .why-card-temp{ --accent: rgba(255,138,101,0.6); }
+  .why-card-light{ --accent: rgba(255,214,102,0.6); }
+  .sensor-explain-head{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Sora', sans-serif; font-weight:600; font-size:14px;
+    color: var(--text); margin-bottom:8px;
+  }
+  .sensor-explain-head svg{
+    width:19px; height:19px; flex-shrink:0; color: var(--text); opacity:0.85;
+  }
+  .sensor-explain-item p{
+    margin:0; font-family:'Inter', sans-serif; font-size:13.5px; line-height:1.75;
+    color: var(--subtext);
+  }
+  .sensor-explain-item p code{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    background: var(--surface); padding:2px 6px; border-radius:5px;
+    color: var(--text);
+  }
+
+  .why-compare{
+    display:flex; flex-wrap:wrap; gap:12px;
+    margin: 6px 0 22px;
+    max-width:680px;
+  }
+  .why-compare-col{
+    flex:1 1 240px;
+    border-radius:16px; border:1px solid var(--border);
+    padding: 16px 18px;
+  }
+  .why-compare-col.bad{
+    background: rgba(255,90,90,0.055);
+    border-color: rgba(255,90,90,0.22);
+  }
+  .why-compare-col.good{
+    background: rgba(90,220,140,0.06);
+    border-color: rgba(90,220,140,0.28);
+  }
+  .why-compare-col h5{
+    display:flex; align-items:center; gap:7px;
+    font-family:'Sora', sans-serif; font-weight:600; font-size:13.5px;
+    margin: 0 0 10px; color: var(--text);
+  }
+  .why-compare-col.bad h5 svg{ width:15px; height:15px; color:#ff8a65; flex-shrink:0; }
+  .why-compare-col.good h5 svg{ width:15px; height:15px; color:#78dc96; flex-shrink:0; }
+  .why-compare-col ul{
+    margin:0; padding-left:18px;
+    font-family:'Inter', sans-serif; font-size:12.5px; line-height:1.75;
+    color: var(--subtext);
+  }
+  .why-compare-col li{ margin-bottom:4px; }
+  .why-compare-col li:last-child{ margin-bottom:0; }
+
+  .flow-diagram{
+    display:flex; flex-wrap:wrap; align-items:stretch; gap:14px;
+    margin: 10px 0 16px;
+  }
+  .flow-box{
+    position:relative;
+    padding:20px 22px 18px;
+    min-width:150px;
+    max-width:220px;
+    border-radius:18px;
+    background: var(--surface-hi); border:1px solid var(--border);
+    font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:600;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    display:flex; flex-direction:column; gap:6px;
+    transition: transform .2s cubic-bezier(.16,1,.3,1), background .3s ease, background-color .3s ease, border-color .3s ease, box-shadow .2s ease, color .3s ease;
+  }
+  .flow-box .flow-icon-svg{
+    width:22px; height:22px;
+    stroke: var(--text); opacity:0.9;
+    margin-bottom:2px;
+    transition: stroke .3s ease;
+  }
+  .flow-box .flow-hint{
+    font-family:'Inter', sans-serif; font-weight:500; font-size:10px;
+    color: var(--subtext); white-space:normal; letter-spacing:0;
+    transition: color .3s ease;
+  }
+  .flow-box .flow-desc{
+    font-family:'Inter', sans-serif; font-weight:400; font-size:11.5px;
+    line-height:1.5; letter-spacing:0;
+    color: var(--subtext); white-space:normal;
+    max-height:0; overflow:hidden; opacity:0;
+    transition: max-height .3s ease, opacity .25s ease, margin-top .3s ease, color .3s ease;
+  }
+  .flow-box.active .flow-desc{
+    max-height:200px; opacity:1; margin-top:4px;
+  }
+  .flow-box:hover{
+    transform: translateY(-3px);
+    background: var(--surface);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+  }
+  .flow-box:active{ transform: translateY(-1px) scale(0.97); transition-duration:.12s; }
+  .flow-box.active{
+    background: var(--accent); color: var(--accent-fg);
+    border-color: var(--accent);
+  }
+  .flow-box.active .flow-icon-svg{ stroke: var(--accent-fg); }
+  .flow-box.active .flow-hint{ color: color-mix(in srgb, var(--accent-fg) 65%, transparent); }
+  .flow-box.active .flow-desc{ color: color-mix(in srgb, var(--accent-fg) 80%, transparent); }
+  .flow-arrow{
+    display:flex; align-items:center; justify-content:center;
+    opacity:0.45; font-family:'JetBrains Mono', monospace; font-size:16px;
+    min-width:20px;
+  }
+  .flow-arrow.pulse{ animation: flowPulse 1.6s ease-in-out infinite; }
+  @keyframes flowPulse{ 0%,100%{ opacity:0.3; transform:translateX(0); } 50%{ opacity:0.9; transform:translateX(3px); } }
+  @media (max-width:640px){
+    .flow-diagram{ flex-direction:column; align-items:stretch; }
+    .flow-box{ max-width:none; }
+    .flow-arrow{ transform:rotate(90deg); padding:2px 0; }
+    .flow-arrow.pulse{ animation: flowPulseV 1.6s ease-in-out infinite; }
+    @keyframes flowPulseV{ 0%,100%{ opacity:0.3; } 50%{ opacity:0.9; } }
+  }
+
+  @media (max-width:560px){
+    .topbar{ border-radius: 24px; flex-wrap:wrap; }
+    .theme-swatches{ order: 3; width:100%; justify-content:center; padding-top:4px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="unsupported-overlay glass" id="unsupportedOverlay">
+  <div class="u-title">Web Serial not supported</div>
+  <div class="u-body">This dashboard talks to your Arduino directly using the Web Serial API, which only works in Chromium-based desktop browsers — Google Chrome or Microsoft Edge, on Windows, Mac, or Linux. Firefox and Safari can't run it. Open this file in Chrome or Edge to connect your device.</div>
+</div>
+<div class="glow">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+</div>
+<div class="dot-grid"></div>
+<div class="wrap">
+
+  <div class="topbar matte">
+    <div class="brand">
+      <div class="brand-dot" id="brandDot"></div>
+      <div class="brand-text">farm<span> / weather detector</span></div>
+    </div>
+    <div class="topbar-actions">
+      <div class="theme-swatches" id="themeSwatches">
+        <button class="swatch swatch-btn active" data-theme-set="graphite" style="background:#1a1a1d;--swatch-fg:#ffffff" title="Graphite" aria-label="Graphite theme"></button>
+        <button class="swatch swatch-btn" data-theme-set="fog" style="background:#e8e8ec;--swatch-fg:#1a1a1d" title="Fog" aria-label="Fog theme"></button>
+        <button class="swatch swatch-btn" data-theme-set="cocoa" style="background:#e8d8c4;--swatch-fg:#3d2817" title="Cocoa" aria-label="Cocoa theme"></button>
+        <button class="swatch swatch-btn" data-theme-set="cherry" style="background:#f4cdd6;--swatch-fg:#7a1f3a" title="Cherry" aria-label="Cherry theme"></button>
+        <button class="swatch swatch-btn" data-theme-set="lagoon" style="background:#c8f0ee;--swatch-fg:#0d4f5c" title="Lagoon" aria-label="Lagoon theme"></button>
+        <button class="swatch swatch-btn" data-theme-set="cottoncandy" style="background:#ffd9e8;--swatch-fg:#3a78b8" title="Cotton Candy" aria-label="Cotton Candy theme"></button>
+      </div>
+      <div class="icon-group">
+        <button class="icon-btn" id="infoBtn" title="About this panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        </button>
+        <button class="icon-btn" id="wiringBtn" title="Hardware & System Flow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="9" y="14" width="6" height="6" rx="1"/><path d="M7 10v2a2 2 0 0 0 2 2h1M17 10v2a2 2 0 0 1-2 2h-1"/></svg>
+        </button>
+        <button class="icon-btn" id="whyBtn" title="Why this matters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2Z"/><path d="M9 21h6"/></svg>
+        </button>
+      </div>
+      <button class="btn btn-primary" id="connectBtn">Connect device</button>
+    </div>
+  </div>
+
+  <div class="controls-bar glass">
+    <div class="controls-group">
+      <button class="btn" id="exportBtn" title="Export readings to CSV">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> 
+        Export CSV
+      </button>
+      <button class="btn" id="threshToggleBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> 
+        Thresholds
+      </button>
+      <button class="btn" id="importBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Import CSV
+      </button>
+      <input type="file" id="importFile" accept=".csv" style="display:none;">
+      <label class="btn switch-btn" for="autoBackupToggle">
+        Auto-backup
+        <span class="switch-track">
+          <input type="checkbox" id="autoBackupToggle">
+          <span class="switch-dot"></span>
+        </span>
+      </label>
+      <button class="btn" id="resetSessionBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></svg>
+        Reset Session
+      </button>
+    </div>
+    <div class="controls-group">
+      <button class="btn" id="unitToggleBtn">°C / °F</button>
+      <button class="btn" id="fullscreenBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> 
+        Fullscreen
+      </button>
+    </div>
+  </div>
+
+  <div class="thresholds-panel glass" id="thresholdsPanel">
+    <div style="font-family:'Sora', sans-serif; font-weight:700; font-size:13px; margin-bottom:8px;">Live Alert Thresholds</div>
+    <div class="thresholds-grid">
+      <div class="thresh-item"><label>Temp Low (°C)</label><input type="number" id="cfgTempLow" value="10.0" step="0.5"></div>
+      <div class="thresh-item"><label>Temp High (°C)</label><input type="number" id="cfgTempHigh" value="38.0" step="0.5"></div>
+      <div class="thresh-item"><label>Hum Low (%)</label><input type="number" id="cfgHumLow" value="20.0"></div>
+      <div class="thresh-item"><label>Hum High (%)</label><input type="number" id="cfgHumHigh" value="90.0"></div>
+      <div class="thresh-item"><label>Soil Low (%)</label><input type="number" id="cfgSoilLow" value="30"></div>
+      <div class="thresh-item"><label>Soil High (%)</label><input type="number" id="cfgSoilHigh" value="85"></div>
+      <div class="thresh-item"><label>Light Low</label><input type="number" id="cfgLightLow" value="200"></div>
+      <div class="thresh-item"><label>Light High</label><input type="number" id="cfgLightHigh" value="900"></div>
+    </div>
+  </div>
+
+  <div class="hero glass">
+    <div class="hero-main">
+      <div class="orb idle" id="orb"></div>
+      <div class="hero-text">
+        <div class="status-label" id="statusLabel">Waiting for connection</div>
+        <div class="status-sub" id="statusSub">click "connect device" and choose your Arduino's port</div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div>Uptime: <span id="sessionUptime">0s</span></div>
+      <div>Updated: <span id="lastUpdated">Never</span></div>
+      <div>Since last alert: <span id="stableSince">No alerts yet</span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card glass" id="tempCard">
+      <div class="icon-badge"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg></div>
+      <div class="card-value skeleton"><span id="tempVal">--</span><span class="unit" id="tempUnit">°C</span><span class="trend" id="tempTrend"></span></div>
+      <div class="card-label">Temperature</div>
+      <div class="card-bar"><div class="card-bar-fill" id="tempBar"></div></div>
+      <div class="card-graph"><svg viewBox="0 0 100 60" preserveAspectRatio="none"><path class="graph-fill" id="tempFill" d=""></path><path class="graph-line" id="tempLine" d="" fill="none"></path></svg></div>
+      <div class="stats-row"><span id="tempMin">Lo: --</span><span id="tempAvg">Avg: --</span><span id="tempMax">Hi: --</span></div>
+    </div>
+
+    <div class="card glass" id="humCard">
+      <div class="icon-badge"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6.5 7.1 6.5 11.6a6.5 6.5 0 1 1-13 0C5.5 9.8 12 2.7 12 2.7Z"/></svg></div>
+      <div class="card-value skeleton"><span id="humVal">--</span><span class="unit">%</span><span class="trend" id="humTrend"></span></div>
+      <div class="card-label">Humidity</div>
+      <div class="card-bar"><div class="card-bar-fill" id="humBar"></div></div>
+      <div class="card-graph"><svg viewBox="0 0 100 60" preserveAspectRatio="none"><path class="graph-fill" id="humFill" d=""></path><path class="graph-line" id="humLine" d="" fill="none"></path></svg></div>
+      <div class="stats-row"><span id="humMin">Lo: --</span><span id="humAvg">Avg: --</span><span id="humMax">Hi: --</span></div>
+    </div>
+
+    <div class="card glass" id="soilCard">
+      <div class="icon-badge">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 13c-3-1-4-4.5-3.3-8 3 .2 5.6 2.3 6 5.5.2 1.4-.3 2.9-1.3 3.9-.5.4-.9.5-1.4.6z"/>
+          <path d="M13 13c2-1 3.2-3.2 2.8-5.6-2.5.1-4.6 1.6-5 4-.1 1.1.2 2.1.9 2.9.4.4.8.6 1.3.7z"/>
+          <path d="M4 20c0-1.8 1.6-3.2 3.6-3 .3-1.6 1.9-2.8 3.7-2.8 1.1 0 2 .4 2.7 1.1.6-.5 1.4-.7 2.3-.7 2 0 3.6 1.3 3.8 3 1.8 0 3.2 1.3 3.2 3H4z"/>
+        </svg>
+      </div>
+      <div class="card-value skeleton"><span id="soilVal">--</span><span class="unit">%</span><span class="trend" id="soilTrend"></span></div>
+      <div class="card-label">Soil Moisture</div>
+      <div class="card-bar"><div class="card-bar-fill" id="soilBar"></div></div>
+      <div class="card-graph"><svg viewBox="0 0 100 60" preserveAspectRatio="none"><path class="graph-fill" id="soilFill" d=""></path><path class="graph-line" id="soilLine" d="" fill="none"></path></svg></div>
+      <div class="stats-row"><span id="soilMin">Lo: --</span><span id="soilAvg">Avg: --</span><span id="soilMax">Hi: --</span></div>
+    </div>
+
+    <div class="card glass" id="lightCard">
+      <div class="icon-badge"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg></div>
+      <div class="card-value skeleton"><span id="lightVal">--</span><span class="unit">LUX</span><span class="trend" id="lightTrend"></span></div>
+      <div class="card-label">Light Level</div>
+      <div class="card-bar"><div class="card-bar-fill" id="lightBar"></div></div>
+      <div class="card-graph"><svg viewBox="0 0 100 60" preserveAspectRatio="none"><path class="graph-fill" id="lightFill" d=""></path><path class="graph-line" id="lightLine" d="" fill="none"></path></svg></div>
+      <div class="stats-row"><span id="lightMin">Lo: --</span><span id="lightAvg">Avg: --</span><span id="lightMax">Hi: --</span></div>
+    </div>
+  </div>
+
+  <div class="history-panel glass" id="historyPanel">
+    <div class="history-header">
+      <div class="history-title">Alert History Log</div>
+      <button class="btn" id="clearLogBtn" style="font-size:10px; padding:4px 8px;">Clear Log</button>
+    </div>
+    <ul class="history-list" id="historyList">
+      <li style="color:var(--subtext)">No alert events recorded this session.</li>
+    </ul>
+  </div>
+
+  <div class="footer-note">web serial · 9600 baud · runs entirely in your browser, no data leaves your machine</div>
+
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-panel glass" id="modalPanel">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const connectBtn = document.getElementById('connectBtn');
+  const brandDot = document.getElementById('brandDot');
+  const orb = document.getElementById('orb');
+  const statusLabel = document.getElementById('statusLabel');
+  const statusSub = document.getElementById('statusSub');
+
+  const el = {
+    temp: document.getElementById('tempVal'),
+    hum: document.getElementById('humVal'),
+    soil: document.getElementById('soilVal'),
+    light: document.getElementById('lightVal'),
+    tempBar: document.getElementById('tempBar'),
+    humBar: document.getElementById('humBar'),
+    soilBar: document.getElementById('soilBar'),
+    lightBar: document.getElementById('lightBar'),
+    tempCard: document.getElementById('tempCard'),
+    humCard: document.getElementById('humCard'),
+    soilCard: document.getElementById('soilCard'),
+    lightCard: document.getElementById('lightCard'),
+    tempLine: document.getElementById('tempLine'),
+    tempFill: document.getElementById('tempFill'),
+    humLine: document.getElementById('humLine'),
+    humFill: document.getElementById('humFill'),
+    soilLine: document.getElementById('soilLine'),
+    soilFill: document.getElementById('soilFill'),
+    lightLine: document.getElementById('lightLine'),
+    lightFill: document.getElementById('lightFill'),
+    sessionUptime: document.getElementById('sessionUptime'),
+    lastUpdated: document.getElementById('lastUpdated'),
+    tempUnit: document.getElementById('tempUnit')
+  };
+
+  const thresholds = {
+    tempLow: document.getElementById('cfgTempLow'),
+    tempHigh: document.getElementById('cfgTempHigh'),
+    humLow: document.getElementById('cfgHumLow'),
+    humHigh: document.getElementById('cfgHumHigh'),
+    soilLow: document.getElementById('cfgSoilLow'),
+    soilHigh: document.getElementById('cfgSoilHigh'),
+    lightLow: document.getElementById('cfgLightLow'),
+    lightHigh: document.getElementById('cfgLightHigh'),
+  };
+
+  let port, reader, keepReading = false, isAutoReconnecting = false;
+  let lineBuffer = "";
+  let useFahrenheit = false;
+  let firstDataReceived = false;
+  let lastAlertTimestamp = null;
+  let currentlyAlerting = false;
+  let autoBackupInterval = null;
+
+  const STORAGE_KEY = 'farmDashboardSessionV1';
+
+  const HISTORY_LEN = 30;
+  const history = { temp: [], hum: [], soil: [], light: [] };
+  const sessionData = [];
+  const alertLogs = [];
+
+  const sessionStats = {
+    temp: [], hum: [], soil: [], light: []
+  };
+
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+  function setBar(fillEl, value, min, max){
+    const pct = clamp(((value - min) / (max - min)) * 100, 0, 100);
+    fillEl.style.width = pct + "%";
+  }
+
+  function pulse(span){
+    span.parentElement.classList.remove('pulse');
+    void span.parentElement.offsetWidth;
+    span.parentElement.classList.add('pulse');
+  }
+
+  function pushHistory(key, value){
+    const arr = history[key];
+    arr.push(value);
+    if(arr.length > HISTORY_LEN) arr.shift();
+  }
+
+  function smoothPath(points){
+    if(points.length < 2) return "";
+    if(points.length === 2){
+      return `M ${points[0][0]},${points[0][1]} L ${points[1][0]},${points[1][1]}`;
+    }
+    let d = `M ${points[0][0]},${points[0][1]}`;
+    for(let i = 0; i < points.length - 1; i++){
+      const p0 = points[i > 0 ? i - 1 : i];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2 > points.length - 1 ? points.length - 1 : i + 2];
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C ${cp1x.toFixed(2)},${cp1y.toFixed(2)} ${cp2x.toFixed(2)},${cp2y.toFixed(2)} ${p2[0].toFixed(2)},${p2[1].toFixed(2)}`;
+    }
+    return d;
+  }
+
+  function drawGraph(lineEl, fillEl, values, min, max){
+    if(values.length < 2){
+      lineEl.setAttribute('d', '');
+      fillEl.setAttribute('d', '');
+      return;
+    }
+    const w = 100, h = 60;
+    const stepX = w / (values.length - 1);
+    const pts = values.map((v, i) => {
+      const t = clamp((v - min) / (max - min), 0, 1);
+      return [i * stepX, h - t * h];
+    });
+    const lineD = smoothPath(pts);
+    const fillD = `${lineD} L ${w},${h} L 0,${h} Z`;
+    lineEl.setAttribute('d', lineD);
+    fillEl.setAttribute('d', fillD);
+  }
+
+  function computeTrend(arr, threshold){
+    if(arr.length < 3) return 'flat';
+    const recent = arr[arr.length - 1];
+    const window = arr.slice(-4, -1);
+    const prevAvg = window.reduce((a, b) => a + b, 0) / window.length;
+    const diff = recent - prevAvg;
+    if(diff > threshold) return 'up';
+    if(diff < -threshold) return 'down';
+    return 'flat';
+  }
+
+  function trendArrow(trend){
+    if(trend === 'up') return '▲';
+    if(trend === 'down') return '▼';
+    return '–';
+  }
+
+  function isValidReading(tempC, hum, soil, light){
+    if(isNaN(soil) || soil < 0 || soil > 100) return false;
+    if(isNaN(light) || light < 0 || light > 1023) return false;
+    if(!isNaN(tempC) && (tempC < -40 || tempC > 80)) return false;
+    if(!isNaN(hum) && (hum < 0 || hum > 100)) return false;
+    return true;
+  }
+
+  function updateStatsUI(key, val, unitSuffix = "") {
+    if (isNaN(val)) return;
+    sessionStats[key].push(val);
+    const arr = sessionStats[key];
+    const min = Math.min(...arr).toFixed(1);
+    const max = Math.max(...arr).toFixed(1);
+    const avg = (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
+
+    document.getElementById(`${key}Min`).textContent = `Lo: ${min}${unitSuffix}`;
+    document.getElementById(`${key}Avg`).textContent = `Avg: ${avg}${unitSuffix}`;
+    document.getElementById(`${key}Max`).textContent = `Hi: ${max}${unitSuffix}`;
+  }
+
+  function logAlert(alertsStr) {
+    const timeStr = new Date().toLocaleTimeString();
+    alertLogs.unshift({ time: timeStr, text: alertsStr });
+    
+    const list = document.getElementById('historyList');
+    list.innerHTML = alertLogs.map(item => 
+      `<li class="history-item"><span>${item.text}</span><span style="color:var(--subtext);">${item.time}</span></li>`
+    ).join('');
+  }
+
+  function evaluateClientThresholds(tempC, hum, soil, light) {
+    let flags = [];
+    if (!isNaN(tempC)) {
+      if (tempC < parseFloat(thresholds.tempLow.value)) flags.push("TEMP_LOW");
+      if (tempC > parseFloat(thresholds.tempHigh.value)) flags.push("TEMP_HIGH");
+    }
+    if (!isNaN(hum)) {
+      if (hum < parseFloat(thresholds.humLow.value)) flags.push("HUMIDITY_LOW");
+      if (hum > parseFloat(thresholds.humHigh.value)) flags.push("HUMIDITY_HIGH");
+    }
+    if (!isNaN(soil)) {
+      if (soil < parseInt(thresholds.soilLow.value)) flags.push("SOIL_DRY");
+      if (soil > parseInt(thresholds.soilHigh.value)) flags.push("SOIL_WATERLOGGED");
+    }
+    if (!isNaN(light)) {
+      if (light < parseInt(thresholds.lightLow.value)) flags.push("LIGHT_LOW");
+      if (light > parseInt(thresholds.lightHigh.value)) flags.push("LIGHT_HIGH");
+    }
+    return flags.length > 0 ? flags.join(" ") : "OK";
+  }
+
+  function applyReading(d){
+    const tempC = d.temp === "ERR" ? NaN : parseFloat(d.temp);
+    const hum = d.hum === "ERR" ? NaN : parseFloat(d.hum);
+    const soil = parseInt(d.soil);
+    const light = parseInt(d.light);
+
+    if(!isValidReading(tempC, hum, soil, light)){
+      console.warn('Discarded out-of-range or corrupted reading:', d);
+      return;
+    }
+
+    if(!isNaN(tempC)) pushHistory('temp', tempC);
+    if(!isNaN(hum)) pushHistory('hum', hum);
+    pushHistory('soil', soil);
+    pushHistory('light', light);
+
+    const tempTrend = computeTrend(history.temp, 0.4);
+    const soilTrend = computeTrend(history.soil, 2);
+
+    let alerts = evaluateClientThresholds(tempC, hum, soil, light);
+    const droughtStress = tempTrend === 'up' && soilTrend === 'down';
+    if(droughtStress){
+      alerts = alerts === "OK" ? "DROUGHT_STRESS" : alerts + " DROUGHT_STRESS";
+    }
+    const isOk = alerts === "OK";
+
+    currentlyAlerting = !isOk;
+    if(!isOk) lastAlertTimestamp = Date.now();
+
+    sessionData.push({ time: d.time, temp: d.temp, hum: d.hum, soil: d.soil, light: d.light, alerts: alerts });
+    if(sessionData.length > 5000) sessionData.shift();
+
+    if (!isOk && (alertLogs.length === 0 || alertLogs[0].text !== alerts)) {
+      logAlert(alerts);
+    }
+
+    if(!firstDataReceived){
+      firstDataReceived = true;
+      document.querySelectorAll('.card-value').forEach(e => e.classList.remove('skeleton'));
+    }
+
+    let dispTemp = d.temp;
+    if (!isNaN(tempC)) {
+      const finalTemp = useFahrenheit ? (tempC * 9/5 + 32) : tempC;
+      dispTemp = finalTemp.toFixed(1);
+      updateStatsUI('temp', finalTemp, useFahrenheit ? "°F" : "°C");
+    }
+
+    el.temp.textContent = dispTemp;
+    el.hum.textContent = d.hum === "ERR" ? "ERR" : d.hum;
+    el.soil.textContent = d.soil;
+    el.light.textContent = d.light;
+    pulse(el.temp); pulse(el.hum); pulse(el.soil); pulse(el.light);
+
+    document.getElementById('tempTrend').textContent = isNaN(tempC) ? '' : trendArrow(tempTrend);
+    document.getElementById('soilTrend').textContent = trendArrow(soilTrend);
+    document.getElementById('humTrend').textContent = isNaN(hum) ? '' : trendArrow(computeTrend(history.hum, 1));
+    document.getElementById('lightTrend').textContent = trendArrow(computeTrend(history.light, 15));
+
+    if(!isNaN(tempC)){
+      setBar(el.tempBar, tempC, -10, 50);
+      drawGraph(el.tempLine, el.tempFill, history.temp, -10, 50);
+    }
+    if(!isNaN(hum)){
+      setBar(el.humBar, hum, 0, 100);
+      drawGraph(el.humLine, el.humFill, history.hum, 0, 100);
+      updateStatsUI('hum', hum, "%");
+    }
+
+    setBar(el.soilBar, soil, 0, 100);
+    drawGraph(el.soilLine, el.soilFill, history.soil, 0, 100);
+    updateStatsUI('soil', soil, "%");
+
+    setBar(el.lightBar, light, 0, 1023);
+    drawGraph(el.lightLine, el.lightFill, history.light, 0, 1023);
+    updateStatsUI('light', light);
+
+    el.tempCard.classList.toggle('flag', alerts.includes('TEMP') || droughtStress);
+    el.humCard.classList.toggle('flag', alerts.includes('HUMIDITY'));
+    el.soilCard.classList.toggle('flag', alerts.includes('SOIL') || droughtStress);
+    el.lightCard.classList.toggle('flag', alerts.includes('LIGHT'));
+
+    orb.classList.remove('idle');
+    orb.classList.toggle('alert', !isOk);
+    orb.classList.toggle('ok', isOk);
+    statusLabel.textContent = isOk ? "All parameters normal" : "Alert — check field";
+    statusSub.textContent = isOk ? "system running" : alerts.trim();
+
+    el.sessionUptime.textContent = `${d.time}s`;
+    el.lastUpdated.textContent = new Date().toLocaleTimeString();
+
+    saveSession();
+  }
+
+  function parseDataLine(line){
+    const parts = line.split(",");
+    if(parts.length < 6 || parts[0] !== "DATA") return null;
+    return {
+      time: parts[1],
+      temp: parts[2],
+      hum: parts[3],
+      soil: parts[4],
+      light: parts[5],
+      alerts: parts.length > 6 ? parts[6] : "OK"
+    };
+  }
+
+  async function startSerialReadLoop() {
+    keepReading = true;
+    const textDecoder = new TextDecoderStream();
+    port.readable.pipeTo(textDecoder.writable);
+    reader = textDecoder.readable.getReader();
+
+    try {
+      while(keepReading){
+        const { value, done } = await reader.read();
+        if(done) break;
+        if(value){
+          lineBuffer += value;
+          let idx;
+          while((idx = lineBuffer.indexOf("\n")) >= 0){
+            const line = lineBuffer.slice(0, idx).trim();
+            lineBuffer = lineBuffer.slice(idx + 1);
+            if(line.startsWith("DATA,")){
+              const d = parseDataLine(line);
+              if(d) applyReading(d);
+            }
+          }
+        }
+      }
+    } catch(err) {
+      console.warn("Serial connection stream interrupted:", err);
+      handleAutoReconnect();
+    }
+  }
+
+  async function handleAutoReconnect() {
+    if (isAutoReconnecting || !port) return;
+    isAutoReconnecting = true;
+    statusLabel.textContent = "Connection lost";
+    statusSub.textContent = "attempting auto-reconnect...";
+
+    let attempts = 0;
+    while (!keepReading && attempts < 5) {
+      attempts++;
+      try {
+        await new Promise(r => setTimeout(r, 2000));
+        await port.open({ baudRate: 9600 });
+        statusLabel.textContent = "Reconnected";
+        statusSub.textContent = "listening on serial port";
+        isAutoReconnecting = false;
+        startSerialReadLoop();
+        return;
+      } catch (e) {
+        statusSub.textContent = `retry attempt ${attempts}/5...`;
+      }
+    }
+    isAutoReconnecting = false;
+    disconnect();
+  }
+
+  async function connect(){
+    if(!('serial' in navigator)){
+      statusLabel.textContent = "Web Serial not supported";
+      statusSub.textContent = "use Chrome or Edge on desktop";
+      return;
+    }
+    try{
+      port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 9600 });
+
+      connectBtn.textContent = "Disconnect";
+      connectBtn.classList.add('connected');
+      brandDot.classList.add('live');
+      statusLabel.textContent = "Connected — waiting for first reading";
+      statusSub.textContent = "listening on serial port";
+
+      startSerialReadLoop();
+    }catch(err){
+      statusLabel.textContent = "Connection failed";
+      statusSub.textContent = err.message || "could not open the serial port";
+      resetConnectButton();
+    }
+  }
+
+  async function disconnect(){
+    keepReading = false;
+    try{ if(reader){ await reader.cancel(); reader.releaseLock(); } }catch(e){}
+    try{ if(port){ await port.close(); } }catch(e){}
+    resetConnectButton();
+    orb.classList.add('idle');
+    orb.classList.remove('alert', 'ok');
+    statusLabel.textContent = "Disconnected";
+    statusSub.textContent = "click \"connect device\" to reconnect";
+    brandDot.classList.remove('live');
+  }
+
+  function resetConnectButton(){
+    connectBtn.textContent = "Connect device";
+    connectBtn.classList.remove('connected');
+  }
+
+  connectBtn.addEventListener('click', () => {
+    if(connectBtn.classList.contains('connected')){ disconnect(); } else { connect(); }
+  });
+
+  function exportCSV(silent){
+    if(sessionData.length === 0){
+      if(!silent) alert("No session data collected to export yet!");
+      return;
+    }
+    let csvContent = "data:text/csv;charset=utf-8,Time(s),Temperature,Humidity(%),Soil(%),Light(Lux),Alerts\n";
+    sessionData.forEach(r => {
+      csvContent += `${r.time},${r.temp},${r.hum},${r.soil},${r.light},${r.alerts}\n`;
+    });
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `farm_weather_data_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  document.getElementById('exportBtn').addEventListener('click', () => exportCSV(false));
+
+  document.getElementById('threshToggleBtn').addEventListener('click', () => {
+    document.getElementById('thresholdsPanel').classList.toggle('open');
+  });
+
+  document.getElementById('clearLogBtn').addEventListener('click', () => {
+    alertLogs.length = 0;
+    document.getElementById('historyList').innerHTML = '<li style="color:var(--subtext)">No alert events recorded this session.</li>';
+    saveSession();
+  });
+
+  document.getElementById('unitToggleBtn').addEventListener('click', () => {
+    useFahrenheit = !useFahrenheit;
+    el.tempUnit.textContent = useFahrenheit ? "°F" : "°C";
+  });
+
+  document.getElementById('fullscreenBtn').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(e => console.warn(e));
+    } else {
+      document.exitFullscreen().catch(e => console.warn(e));
+    }
+  });
+
+  // ---- Theme swatch switcher (no persistence) ----
+  const swatchButtons = document.querySelectorAll('.swatch-btn');
+  function setTheme(name){
+    document.documentElement.setAttribute('data-theme', name);
+    swatchButtons.forEach(s => s.classList.toggle('active', s.dataset.themeSet === name));
+  }
+  swatchButtons.forEach(s => s.addEventListener('click', () => setTheme(s.dataset.themeSet)));
+  setTheme('graphite');
+
+  // ---- Info modal panels ----
+  const modalContent = {
+    info: `
+      <h3>About this dashboard</h3>
+      <p>A live dashboard for an Arduino Nano farm sensor. Data streams in over USB (Web Serial) and HC-05 Bluetooth; both links accept commands back. Everything stays in your browser.</p>
+
+      <h4>The four readings</h4>
+      <ul>
+        <li><strong>Temperature</strong> (°C/°F) and <strong>Humidity</strong> (%) — from the DHT11.</li>
+        <li><strong>Soil Moisture</strong> (%) — from the analog probe, calibrated to your soil.</li>
+        <li><strong>Light</strong> (0–1023) — from the LDR; higher = brighter.</li>
+      </ul>
+      <p>Each card shows the live value, a trend arrow (▲/▼/–), a mini graph, and Lo/Avg/Hi.</p>
+
+      <h4>Status orb</h4>
+      <p>Pulses when all readings are safe; flashes and inverts the offending card (black/white) the moment any reading crosses a threshold.</p>
+
+      <h4>Controls</h4>
+      <ul>
+        <li><strong>Themes</strong> — recolor the dashboard (resets on reload).</li>
+        <li><strong>Thresholds</strong> — set "too dry" / "too hot" live, no code change.</li>
+        <li><strong>Export / Import</strong> — save or reload a session as CSV.</li>
+        <li><strong>Auto-backup</strong> — CSV snapshot every 5 min.</li>
+        <li><strong>Reset Session</strong> — clear all data, start fresh.</li>
+      </ul>
+
+      <h4>Actuators & commands</h4>
+      <p>Two actuators, controllable from either link:</p>
+      <ul>
+        <li><strong>Servo (D3)</strong> — <code>SERVO,0</code>…<code>SERVO,180</code> (vent, shade, valve).</li>
+        <li><strong>Buzzer (D4)</strong> — <code>BUZZER,0</code> silence, <code>BUZZER,1</code> enable, <code>BUZZER,TEST</code>.</li>
+      </ul>
+      <p>Force or clear alerts with <code>ALERT,TEMP_HIGH</code> / <code>ALERT,OK</code>. Each alert has a unique beep pattern; two or more at once sounds a continuous warning.</p>
+
+      <h4>Telemetry</h4>
+      <p>Every 2 seconds the Nano sends one line, e.g. <code>DATA,12,26.5,45.0,62,540,OK</code> — uptime, temp, humidity, soil %, light, alert.</p>
+
+      <p>Shortcuts: <strong>C</strong> connect, <strong>E</strong> export, <strong>Esc</strong> close.</p>
+    `,
+    wiring: `
+      <h3>Hardware & System Flow</h3>
+      <p class="flow-tap-hint" style="font-family:'Inter',sans-serif;font-size:12px;color:var(--subtext);margin:2px 0 4px;">Tap a stage to see what happens there.</p>
+      <div class="flow-diagram" id="flowDiagram">
+        <div class="flow-box" data-flow="sensors">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-8"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6Z"/><path d="M12 14c0-3-2.5-5-6-5 0 3 2.5 5 6 5Z"/></svg>
+          SENSORS<span class="flow-hint">DHT11, soil, LDR</span>
+          <span class="flow-desc" data-desc="sensors"></span>
+        </div>
+        <span class="flow-arrow pulse">→</span>
+        <div class="flow-box" data-flow="arduino">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+          ARDUINO NANO<span class="flow-hint">reads, checks, packages</span>
+          <span class="flow-desc" data-desc="arduino"></span>
+        </div>
+        <span class="flow-arrow pulse">→</span>
+        <div class="flow-box" data-flow="serial">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a16 16 0 0 1 16 0"/><path d="M7.5 15a10.5 10.5 0 0 1 9 0"/><path d="M11 19a4 4 0 0 1 2 0"/><circle cx="12" cy="19.5" r="0.9" fill="currentColor" stroke="none"/></svg>
+          USB SERIAL<span class="flow-hint">D0/D1, 9600 baud</span>
+          <span class="flow-desc" data-desc="serial"></span>
+        </div>
+        <span class="flow-arrow pulse">+</span>
+        <div class="flow-box" data-flow="bluetooth">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+          HC-05 BT<span class="flow-hint">D11/D12, 9600 baud</span>
+          <span class="flow-desc" data-desc="bluetooth"></span>
+        </div>
+        <span class="flow-arrow pulse">→</span>
+        <div class="flow-box" data-flow="dashboard">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+          THIS DASHBOARD<span class="flow-hint">parses & renders live</span>
+          <span class="flow-desc" data-desc="dashboard"></span>
+        </div>
+        <span class="flow-arrow pulse">→</span>
+        <div class="flow-box" data-flow="user">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+          USER<span class="flow-hint">sees it, decides, acts</span>
+          <span class="flow-desc" data-desc="user"></span>
+        </div>
+        <span class="flow-arrow pulse">⤴</span>
+        <div class="flow-box" data-flow="commands">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+          COMMANDS<span class="flow-hint">SERVO, BUZZER, ALERT</span>
+          <span class="flow-desc" data-desc="commands"></span>
+        </div>
+        <span class="flow-arrow pulse">→</span>
+        <div class="flow-box" data-flow="actuators">
+          <svg class="flow-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 6l10 4M2 10l10 4M22 6l-10 4M22 10l-10 4"/></svg>
+          ACTUATORS<span class="flow-hint">buzzer + servo</span>
+          <span class="flow-desc" data-desc="actuators"></span>
+        </div>
+      </div>
+
+      <h4>Wiring table</h4>
+      <div class="table-wrap">
+        <table class="wiring-table">
+          <thead>
+            <tr><th>Component</th><th>Pin</th><th>Signal</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DHT11 <span class="table-sub">temp + humidity</span></td>
+              <td><code>D2</code></td>
+              <td>Digital, pulse-timed</td>
+              <td>Needs <code>DHT.h</code> to decode microsecond pulse widths</td>
+            </tr>
+            <tr>
+              <td>Servo motor</td>
+              <td><code>D3</code></td>
+              <td>PWM (Servo.h)</td>
+              <td>0–180° via <code>SERVO,angle</code>; drives vents / valves / shade</td>
+            </tr>
+            <tr>
+              <td>Passive buzzer</td>
+              <td><code>D4</code></td>
+              <td>Digital tone</td>
+              <td><code>tone()/noTone()</code>; distinct beep pattern per alert</td>
+            </tr>
+            <tr>
+              <td>HC-05 Bluetooth</td>
+              <td><code>D11</code> RX / <code>D12</code> TX</td>
+              <td>SoftwareSerial, 9600</td>
+              <td>HC-05 TX → Nano D11; Nano D12 → HC-05 RX <strong>through a voltage divider</strong> (5V → 3.3V)</td>
+            </tr>
+            <tr>
+              <td>Soil moisture probe</td>
+              <td><code>A0</code></td>
+              <td>Analog (0–1023)</td>
+              <td>Raw mapped 1023→0% (dry) / 300→100% (wet); conductivity-based</td>
+            </tr>
+            <tr>
+              <td>LDR light sensor</td>
+              <td><code>A1</code></td>
+              <td>Analog (0–1023)</td>
+              <td>Value inverted (<code>1023 - raw</code>) so higher = brighter</td>
+            </tr>
+            <tr>
+              <td>USB to computer</td>
+              <td><code>D0</code> / <code>D1</code></td>
+              <td>Hardware Serial, 9600</td>
+              <td>Nano's built-in USB-serial; drives this dashboard via Web Serial</td>
+            </tr>
+            <tr>
+              <td>All components</td>
+              <td><code>5V</code> / <code>GND</code></td>
+              <td>Power</td>
+              <td>Shared rail from the Nano; no flame/fire sensor in this build</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>How each sensor works</h4>
+      <div class="sensor-explain">
+        <div class="sensor-explain-item">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg>
+            <span>DHT11 — temperature & humidity</span>
+          </div>
+          <p>A humidity strip plus a thermistor, read by a built-in chip. It outputs a timed pulse train the Nano decodes with <code>DHT.h</code> about once per second.</p>
+        </div>
+        <div class="sensor-explain-item">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-8"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6Z"/><path d="M12 14c0-3-2.5-5-6-5 0 3 2.5 5 6 5Z"/></svg>
+            <span>Soil moisture probe</span>
+          </div>
+          <p>Two prongs in the soil. More moisture = lower resistance = a voltage the Nano reads with <code>analogRead()</code> (0–1023), mapped to 0–100% via your dry/wet calibration.</p>
+        </div>
+        <div class="sensor-explain-item">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+            <span>LDR light sensor</span>
+          </div>
+          <p>A photoresistor whose resistance drops with light. The Nano reads the voltage divider with <code>analogRead()</code>; firmware inverts it (<code>1023 - raw</code>) so higher = brighter.</p>
+        </div>
+      </div>
+
+      <h4>Buzzer alert patterns</h4>
+      <div class="table-wrap">
+        <table class="wiring-table">
+          <thead><tr><th>Alert</th><th>Pattern</th><th>Pitch</th></tr></thead>
+          <tbody>
+            <tr><td>TEMP_HIGH</td><td>3 short beeps</td><td>2300 Hz</td></tr>
+            <tr><td>TEMP_LOW</td><td>2 long low beeps</td><td>500 Hz</td></tr>
+            <tr><td>HUMIDITY_HIGH</td><td>2 medium beeps</td><td>1400 Hz</td></tr>
+            <tr><td>HUMIDITY_LOW</td><td>1 long low beep</td><td>600 Hz</td></tr>
+            <tr><td>SOIL_DRY</td><td>3 quick beeps</td><td>1700 Hz</td></tr>
+            <tr><td>SOIL_WATERLOGGED</td><td>2 long low beeps</td><td>450 Hz</td></tr>
+            <tr><td>LIGHT_LOW</td><td>2 quick medium beeps</td><td>1200 Hz</td></tr>
+            <tr><td>LIGHT_HIGH</td><td>2 quick high beeps</td><td>2400 Hz</td></tr>
+            <tr><td>2+ alerts at once</td><td>continuous warning</td><td>2500 Hz</td></tr>
+            <tr><td>OK</td><td>silent</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Commands (USB or Bluetooth)</h4>
+      <div class="table-wrap">
+        <table class="wiring-table">
+          <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>SERVO,0</code> … <code>SERVO,180</code></td><td>Move the servo on D3 to the given angle</td></tr>
+            <tr><td><code>BUZZER,0</code> / <code>BUZZER,1</code></td><td>Silence / re-enable the alert buzzer</td></tr>
+            <tr><td><code>BUZZER,TEST</code></td><td>Play a short 3-tone test beep</td></tr>
+            <tr><td><code>ALERT,OK</code></td><td>Clear any forced alert</td></tr>
+            <tr><td><code>ALERT,&lt;name&gt;</code></td><td>Force a specific alert state (e.g. <code>ALERT,TEMP_HIGH</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>How data actually flows</h4>
+      <p>Every 2 seconds the Nano sends one line (e.g. <code>DATA,12,26.5,45.0,62,540,OK</code>) over USB <em>and</em> Bluetooth together. This page opens the USB port via Web Serial and updates the dashboard live — no server, no internet. Web Serial needs Chrome or Edge.</p>
+    `,
+    why: `
+      <h3>Why this matters for the user</h3>
+      <p>Each reading earns its place by changing what you do next. Here's why each one matters.</p>
+
+      <div class="sensor-explain">
+        <div class="sensor-explain-item why-card why-card-soil">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-8"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6Z"/><path d="M12 14c0-3-2.5-5-6-5 0 3 2.5 5 6 5Z"/></svg>
+            <span>Soil moisture → water on demand, not on a timer</span>
+          </div>
+          <p>Fixed-schedule irrigation wastes water when it's damp and under-waters on hot days. A live moisture reading makes watering a response to actual conditions — vital where water is scarce.</p>
+        </div>
+
+        <div class="sensor-explain-item why-card why-card-temp">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg>
+            <span>Temperature & humidity → catch stress before it shows</span>
+          </div>
+          <p>Fungal disease and heat stress damage plants before they look sick. Catching the spike early — while it's still just a number — turns "repair" into "vent, shade, water now," while it's still reversible.</p>
+        </div>
+
+        <div class="sensor-explain-item why-card why-card-light">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+            <span>Light level → spot a shading problem early</span>
+          </div>
+          <p>Photosynthesis runs on light. A slow drop over days — before growth visibly slows — can flag an overgrown tree, dusty roof, or shifting season. None of it shows by eye until weeks have passed.</p>
+        </div>
+
+        <div class="sensor-explain-item why-card why-card-soil">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a9 9 0 0 0 18 0v-4M7 10v4a5 5 0 0 0 10 0v-4M12 14v5"/></svg>
+            <span>Buzzer → hands-free, across-the-room alerts</span>
+          </div>
+          <p>A buzzer only needs your ears — useful when you're across the greenhouse. Each alert has its own beep pattern, so you can tell "too dry" from "too hot" without looking. Two or more at once sounds a continuous warning.</p>
+        </div>
+
+        <div class="sensor-explain-item why-card why-card-light">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg>
+            <span>Servo → act on the reading, not just display it</span>
+          </div>
+          <p>The servo on D3 closes the loop: when soil dries or temp spikes, it can open a vent, shade, or valve automatically the moment a threshold is crossed — turning "the dashboard told me" into "the system already started fixing it."</p>
+        </div>
+
+        <div class="sensor-explain-item why-card why-card-temp">
+          <div class="sensor-explain-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+            <span>USB + Bluetooth → desk and field at once</span>
+          </div>
+          <p>USB for the desk, Bluetooth for the field — same data, same commands either way. The choice is where you are, not what you can do.</p>
+        </div>
+      </div>
+
+      <h4>Reactive vs. proactive</h4>
+      <div class="why-compare">
+        <div class="why-compare-col bad">
+          <h5><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Without live data</h5>
+          <ul>
+            <li>Problems are spotted once they're visible — wilting, browning, stunted growth</li>
+            <li>Watering and shading decisions are guesses or fixed schedules</li>
+            <li>By the time it's obvious, some damage is already irreversible</li>
+          </ul>
+        </div>
+        <div class="why-compare-col good">
+          <h5><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> With this dashboard</h5>
+          <ul>
+            <li>Problems surface as a number crossing a threshold, days earlier</li>
+            <li>Watering and shading respond to actual, current conditions</li>
+            <li>Action happens while the problem is still fully reversible</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>The bigger picture</h4>
+      <p>Four readings, tracked and threshold-checked automatically, become an early-warning system — precision-ag ideas at a fraction of the cost. The value: shifting from <strong>reactive</strong> (fixing visible damage) to <strong>proactive</strong> (catching it while it's still just numbers).</p>
+    `
+  };
+
+  const flowDetails = {
+    sensors: "Three sensors do the physical sensing: the DHT11 on D2 measures temperature and humidity, a soil probe on A0 measures moisture by conductivity, and an LDR on A1 measures ambient light. All three are wired straight into the Arduino Nano's pins.",
+    arduino: "Every 2 seconds the Nano reads all three sensors, maps the raw soil and LDR values into percentages, counts how many readings are out of range, and packages everything into one line of text. It then sends that line out over both USB and Bluetooth at once.",
+    serial: "The telemetry travels down the USB cable on the Nano's hardware serial pins D0/D1 at 9600 baud. No wifi, no cloud, no third-party server in between — just a wire.",
+    bluetooth: "The same line is also sent to an HC-05 module on SoftwareSerial pins D11/D12, also at 9600 baud. The Nano's 5V TX goes through a voltage divider down to 3.3V before hitting the HC-05's RX. This is the link a phone or field laptop pairs with.",
+    dashboard: "Running in your Chrome or Edge browser, this page opens a direct Web Serial connection to that USB port, reads each line as it arrives, and updates every number, bar, and graph on screen in real time.",
+    user: "That's you. The dashboard turns raw sensor data into a decision you can act on — water the soil, add shade, improve ventilation — before a problem becomes visible crop damage.",
+    commands: "The link is two-way. From either USB or Bluetooth you can send text commands back to the Nano: move the servo, silence or test the buzzer, or force and clear alert states. The Nano reads both command buffers every loop.",
+    actuators: "Commands turn into physical action: the servo on D3 swings to the angle you set (a vent, a shade, a valve), and the passive buzzer on D4 plays the beep pattern for the active alert — or a continuous high-pitched warning when two or more alerts are active at once."
+  };
+  function initFlowDiagram(){
+    const diagram = document.getElementById('flowDiagram');
+    if(!diagram) return;
+    diagram.querySelectorAll('.flow-box').forEach(box => {
+      const key = box.getAttribute('data-flow');
+      const descEl = box.querySelector('.flow-desc');
+      if(descEl) descEl.textContent = flowDetails[key] || '';
+      box.addEventListener('click', () => {
+        const wasActive = box.classList.contains('active');
+        diagram.querySelectorAll('.flow-box').forEach(b => b.classList.remove('active'));
+        if(!wasActive) box.classList.add('active');
+      });
+    });
+  }
+  function openModal(key){
+    document.getElementById('modalBody').innerHTML = modalContent[key];
+    document.getElementById('modalBackdrop').classList.add('open');
+    if(key === 'wiring') initFlowDiagram();
+  }
+  function closeModal(){
+    document.getElementById('modalBackdrop').classList.remove('open');
+  }
+  document.getElementById('infoBtn').addEventListener('click', () => openModal('info'));
+  document.getElementById('wiringBtn').addEventListener('click', () => openModal('wiring'));
+  document.getElementById('whyBtn').addEventListener('click', () => openModal('why'));
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+    if(e.target.id === 'modalBackdrop') closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeModal();
+  });
+
+  // ---- Session persistence (localStorage) ----
+  function saveSession(){
+    try{
+      const payload = {
+        sessionData: sessionData.slice(-3000),
+        history, alertLogs: alertLogs.slice(0, 50),
+        sessionStats, lastAlertTimestamp
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }catch(e){ console.warn('Could not save session', e); }
+  }
+
+  function loadSession(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      const payload = JSON.parse(raw);
+      sessionData.push(...(payload.sessionData || []));
+      Object.assign(history, payload.history || { temp: [], hum: [], soil: [], light: [] });
+      alertLogs.push(...(payload.alertLogs || []));
+      Object.assign(sessionStats, payload.sessionStats || { temp: [], hum: [], soil: [], light: [] });
+      lastAlertTimestamp = payload.lastAlertTimestamp || null;
+      return sessionData.length > 0;
+    }catch(e){ console.warn('Could not load session', e); return false; }
+  }
+
+  function renderRestoredUI(){
+    if(sessionData.length === 0) return;
+    const last = sessionData[sessionData.length - 1];
+    firstDataReceived = true;
+    document.querySelectorAll('.card-value').forEach(e => e.classList.remove('skeleton'));
+
+    el.temp.textContent = last.temp;
+    el.hum.textContent = last.hum;
+    el.soil.textContent = last.soil;
+    el.light.textContent = last.light;
+
+    if(last.temp !== "ERR") setBar(el.tempBar, parseFloat(last.temp), -10, 50);
+    if(last.hum !== "ERR") setBar(el.humBar, parseFloat(last.hum), 0, 100);
+    setBar(el.soilBar, parseInt(last.soil), 0, 100);
+    setBar(el.lightBar, parseInt(last.light), 0, 1023);
+
+    drawGraph(el.tempLine, el.tempFill, history.temp, -10, 50);
+    drawGraph(el.humLine, el.humFill, history.hum, 0, 100);
+    drawGraph(el.soilLine, el.soilFill, history.soil, 0, 100);
+    drawGraph(el.lightLine, el.lightFill, history.light, 0, 1023);
+
+    ['temp','hum','soil','light'].forEach(k => {
+      const arr = sessionStats[k];
+      if(arr && arr.length){
+        const mn = Math.min(...arr).toFixed(1), mx = Math.max(...arr).toFixed(1);
+        const avg = (arr.reduce((a,b) => a+b, 0) / arr.length).toFixed(1);
+        document.getElementById(`${k}Min`).textContent = `Lo: ${mn}`;
+        document.getElementById(`${k}Avg`).textContent = `Avg: ${avg}`;
+        document.getElementById(`${k}Max`).textContent = `Hi: ${mx}`;
+      }
+    });
+
+    document.getElementById('historyList').innerHTML = alertLogs.length
+      ? alertLogs.map(item => `<li class="history-item"><span>${item.text}</span><span style="color:var(--subtext);">${item.time}</span></li>`).join('')
+      : '<li style="color:var(--subtext)">No alert events recorded this session.</li>';
+
+    statusLabel.textContent = "Restored previous session";
+    statusSub.textContent = "connect your Arduino to resume live data";
+    el.sessionUptime.textContent = `${last.time}s (restored)`;
+  }
+
+  function resetSessionState(){
+    sessionData.length = 0;
+    alertLogs.length = 0;
+    history.temp = []; history.hum = []; history.soil = []; history.light = [];
+    sessionStats.temp = []; sessionStats.hum = []; sessionStats.soil = []; sessionStats.light = [];
+    lastAlertTimestamp = null;
+    currentlyAlerting = false;
+    firstDataReceived = false;
+
+    ['temp','hum','soil','light'].forEach(k => {
+      document.getElementById(`${k}Min`).textContent = 'Lo: --';
+      document.getElementById(`${k}Avg`).textContent = 'Avg: --';
+      document.getElementById(`${k}Max`).textContent = 'Hi: --';
+      document.getElementById(`${k}Trend`).textContent = '';
+    });
+    el.temp.textContent = '--'; el.hum.textContent = '--';
+    el.soil.textContent = '--'; el.light.textContent = '--';
+    document.querySelectorAll('.card-value').forEach(e => e.classList.add('skeleton'));
+    [el.tempLine, el.humLine, el.soilLine, el.lightLine, el.tempFill, el.humFill, el.soilFill, el.lightFill].forEach(e => e.setAttribute('d',''));
+    [el.tempBar, el.humBar, el.soilBar, el.lightBar].forEach(e => e.style.width = '0%');
+    document.getElementById('historyList').innerHTML = '<li style="color:var(--subtext)">No alert events recorded this session.</li>';
+    el.sessionUptime.textContent = '0s';
+    el.lastUpdated.textContent = 'Never';
+    document.getElementById('stableSince').textContent = 'No alerts yet';
+    orb.classList.add('idle');
+    orb.classList.remove('alert', 'ok');
+    el.tempCard.classList.remove('flag');
+    el.humCard.classList.remove('flag');
+    el.soilCard.classList.remove('flag');
+    el.lightCard.classList.remove('flag');
+    statusLabel.textContent = "Waiting for connection";
+    statusSub.textContent = 'click "connect device" and choose your Arduino\'s port';
+  }
+
+  document.getElementById('resetSessionBtn').addEventListener('click', () => {
+    if(!confirm('Clear all session data? This cannot be undone.')) return;
+    resetSessionState();
+    localStorage.removeItem(STORAGE_KEY);
+  });
+
+  // ---- Import CSV ----
+  document.getElementById('importBtn').addEventListener('click', () => {
+    document.getElementById('importFile').click();
+  });
+  document.getElementById('importFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const fr = new FileReader();
+    fr.onload = (ev) => {
+      const lines = ev.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
+      if(lines.length < 2){ alert('CSV has no data rows.'); return; }
+      if(!confirm('Importing will replace the current session data. Continue?')) return;
+      resetSessionState();
+      let imported = 0;
+      for(let i = 1; i < lines.length; i++){
+        const cols = lines[i].split(',');
+        if(cols.length < 5) continue;
+        applyReading({ time: cols[0], temp: cols[1], hum: cols[2], soil: cols[3], light: cols[4] });
+        imported++;
+      }
+      alert(`Imported ${imported} readings.`);
+    };
+    fr.readAsText(file);
+    e.target.value = '';
+  });
+
+  // ---- Auto-backup ----
+  document.getElementById('autoBackupToggle').addEventListener('change', (e) => {
+    if(e.target.checked){
+      autoBackupInterval = setInterval(() => exportCSV(true), 5 * 60 * 1000);
+    } else if(autoBackupInterval){
+      clearInterval(autoBackupInterval);
+      autoBackupInterval = null;
+    }
+  });
+
+  // ---- Time-since-last-alert ticker ----
+  setInterval(() => {
+    const target = document.getElementById('stableSince');
+    if(!target) return;
+    if(currentlyAlerting){ target.textContent = 'Alert active now'; return; }
+    if(lastAlertTimestamp === null){ target.textContent = 'No alerts yet'; return; }
+    const secs = Math.floor((Date.now() - lastAlertTimestamp) / 1000);
+    const m = Math.floor(secs / 60), s = secs % 60;
+    target.textContent = `Stable for ${m}m ${s}s`;
+  }, 1000);
+
+  // ---- Keyboard shortcuts ----
+  document.addEventListener('keydown', (e) => {
+    if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+    const k = e.key.toLowerCase();
+    if(k === 'c') connectBtn.click();
+    else if(k === 'e') exportCSV(false);
+  });
+
+  // ---- Unsupported browser check ----
+  if(!('serial' in navigator)){
+    document.getElementById('unsupportedOverlay').style.display = 'flex';
+  }
+
+  // ---- Restore previous session on load ----
+  if(loadSession()) renderRestoredUI();
+</script>
+</body>
+</html>
+
